@@ -89,13 +89,29 @@ FishEye2D.prototype = {
 
 		this.restoreResetEffects();
 
-
-		this.area.observe('mousemove', this.mouseMove.bindAsEventListener(this));
+		this.observers = {
+			'mouseover': [[this.area, this.mouseOver.bindAsEventListener(this)], 
+						 [document, this.resetFisheye.bindAsEventListener(this)]],
+			'mousemove': [[this.area, this.mouseMove.bindAsEventListener(this)]],
+			'click': 	 [[this.container, this.handleClicks.bindAsEventListener(this)]]
+		}
+		this.registerObservers();
+		// elem-event-func
+/*		this.area.observe('mousemove', this.mouseMove.bindAsEventListener(this));
 		this.area.observe('mouseover', this.mouseOver.bindAsEventListener(this));
 		this.container.observe('click', this.handleClicks.bindAsEventListener(this));
 		document.observe('mouseover', this.resetFisheye.bindAsEventListener(this));
-
+*/
 	},
+	applyToObservers: function(func) {
+		Object.keys(this.observers).each(function(eventName) {
+			this.observers[eventName].each(function(elemFunc) {
+				elemFunc[0][func](eventName, elemFunc[1]);
+			}.bind(this));
+		}.bind(this));
+	},
+	registerObservers: function() { this.applyToObservers('observe') },
+	unRegisterObservers: function() { this.applyToObservers('stopObserving') },
 	restoreResetEffects: function(){
 		this.resetEffects = new Array();
 		this.matrix.each(function(row, i) {
