@@ -36,15 +36,6 @@ FishEye2D.prototype = {
 		this.containerPosition = this.container.cumulativeOffset();
 		this.frameLength = this.container.positionedOffset().top;
 
-		/* FOR DEBUGGING *
-		for(var i=0;i<5;i++) {
-			for(var j=0;j<5;j++) { if(j>=3 && i>=3) continue;
-				var div = (new Element('div')).update(new Element('img', {src: 'doc.png'}));
-				this.container.appendChild(div);
-			}
-		}
-		/* FOR DEBUGGING */
-		
 		this.onClick = options['onClick'] || Prototype.emptyFunction;
 		this.onMouseOver = options['onMouseOver'] || Prototype.emptyFunction;
 		
@@ -67,7 +58,8 @@ FishEye2D.prototype = {
 			this.distanceModel = this._realDistanceModel;
 		if  (!Object.isFunction(this.distanceModel)) alert('Error! Did not get a proper distance model function');
 
-		this.maximumDistance = Math.round(this.distanceModel(this.areaSize, this.areaSize));
+		var max = this.areaSize - (this.areaSize-this.containerSize)/2;
+		this.maximumDistance = Math.round(this.distanceModel(max, max));
 
 		this.matrix = new Array();
 		items.inGroupsOf(this.dimension).each(function(row, i) {
@@ -75,8 +67,8 @@ FishEye2D.prototype = {
 			row.each(function(item, j) { 
 				if (!item) return;
 				item.setStyle(""+
-//DEBUG//
-//"background-color: rgb(" + (i*j*20+50) + "," + (j*20+50) + "," + (i*20+50) + ");" +
+					//DEBUG
+					//"background-color: rgb(" + (i*j*20+50) + "," + (j*20+50) + "," + (i*20+50) + ");" +
 					'left:' + i*(this.initialSize) + 'px;' +
 					'top:' + j*(this.initialSize) + 'px;' +
 					'height:' + this.initialSize + 'px;' +
@@ -96,12 +88,6 @@ FishEye2D.prototype = {
 			'click': 	 [[this.container, this.handleClicks.bindAsEventListener(this)]]
 		}
 		this.registerObservers();
-		// elem-event-func
-/*		this.area.observe('mousemove', this.mouseMove.bindAsEventListener(this));
-		this.area.observe('mouseover', this.mouseOver.bindAsEventListener(this));
-		this.container.observe('click', this.handleClicks.bindAsEventListener(this));
-		document.observe('mouseover', this.resetFisheye.bindAsEventListener(this));
-*/
 	},
 	applyToObservers: function(func) {
 		Object.keys(this.observers).each(function(eventName) {
@@ -144,9 +130,12 @@ FishEye2D.prototype = {
 
 				var level = this.maximumDistance-distance;
 
-//TODO: parameterize the size function
-//				var size = Math.round((level / (this.maximumDistance/this.scaleSize) ) + this.minimumSize);
-				var size = Math.round(2000 / ((distance)+11)) + this.minimumSize;
+				//TODO: parameterize the size function
+				//var size = Math.round((level / (this.maximumDistance/this.scaleSize) ) + this.minimumSize);
+				//var size = Math.round(1000 / ((distance)+11)) + this.minimumSize;
+				var p0 = 5, p1 = 5, p2 = this.scaleSize, t = level/this.maximumDistance;
+				size = Math.pow(1-t, 2)*p0 + 2*t*(1-t)*p1 + Math.pow(t,2)*p2 + this.minimumSize;
+				//console.log(t);
 				var positionCorrection = Math.round((this.initialSize-size)/2);
 
 				item.setStyle({

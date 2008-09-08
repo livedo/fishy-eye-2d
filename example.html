@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>2D Fisheye</title>
+		<link rel="stylesheet" href="css/master.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="css/frontpage.css" type="text/css" media="screen" charset="utf-8">
+		<script src="lib/prototype.js" type="text/javascript"></script>
+		<script src="lib/effects.js" type="text/javascript"></script>
+		<script src="src/fisheye2d.js" type="text/javascript"></script>
+		<style type="text/css">
+			#fisheye_container {
+				position: absolute;
+				width: 700px;
+				height: 700px;
+				left: 50%;
+				top: 0%;
+				margin: -140px 0 0 -350px;
+			}
+
+			#fisheye {
+				position: absolute;
+				top: 200px;
+				left: 200px;
+				width: 300px;
+				height: 300px;
+			}
+			
+			#fisheye div { 
+				position: absolute;
+				text-align: center;
+			}			
+			#fisheye div img {
+				height: 95%;
+				width: 95%;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="fisheye_container">
+			<div id="fisheye">
+				<div><img src="icons/agent.png" /></div>
+				<div><img src="icons/atomic.png" /></div>
+				<div><img src="icons/home.png" /></div>
+				<div><img src="icons/note.png" /></div>
+				<div><img src="icons/laptop.png" /></div>
+				<div><img src="icons/help.png" /></div>
+				<div><img src="icons/palette.png" /></div>
+				<div><img src="icons/postgres.png" /></div>
+				<div><img src="icons/blocks.png" /></div>
+				<div><img src="icons/babel.png" /></div>
+				<div><img src="icons/run.png" /></div>
+				<div><img src="icons/golf.png" /></div>
+				<div><img src="icons/guitar.png" /></div>
+				<div><img src="icons/network.png" /></div>
+				<div><img src="icons/stone.png" /></div>
+				<div><img src="icons/alarm.png" /></div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var fsDiv = $('fisheye');
+			// The fish eye
+			var fs = new FishEye2D('fisheye_container', {
+				scaleSize: 50,
+				minimumSize: 65,
+				onClick: function(event) {
+					new Effect.Pulsate(event.element());
+					this.unRegisterObservers();
+				}
+			});
+		</script>
+	</body>
+	
+</html>
