@@ -33,7 +33,7 @@
 				text-align: center;
 			}			
 			#fisheye div img {
-				height: 95%;
+				height: 100%;
 				width: 95%;
 			}
 
@@ -65,11 +65,11 @@
 			var fsDiv = $('fisheye');
 			// The fish eye
 			var fs = new FishEye2D('fisheye_container', {
-				scaleSize: 50,
+				scaleSize: 60,
 				minimumSize: 65,
 				onClick: function(event) {
 					new Effect.Pulsate(event.element());
-					this.unRegisterObservers();
+					this.unRegisterObservers(); // freezes and disables the fish eye element
 				}
 			});
 		</script>
